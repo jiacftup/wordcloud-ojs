@@ -1,70 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Word Cloud</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-    }
-    /* Judul dihapus, jadi styling h2 juga bisa dihapus */
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    canvas { border: 1px solid #eee; }
   </style>
 </head>
 <body>
-<!-- Canvas diperbesar -->
-<canvas id="wordcloud" width="400" height="400"></canvas>
 
-<!-- Load wordcloud2.js -->
+<canvas id="wordcloud" width="350" height="350"></canvas>
+
 <script src="https://cdn.jsdelivr.net/gh/timdream/wordcloud2.js@gh-pages/src/wordcloud2.js"></script>
 <script>
-var words = [
-  ['Artificial Intelligence', 15],
-  ['Machine Learning', 15],
-  ['Cyber Security', 15],
-  ['Big Data', 15],
-  ['Software Engineering', 15],
-  ['Cloud Computing', 15],
-  ['Data Science', 15],
-  ['IoT', 20],
-  ['Computer Vision', 15],
-  ['NLP', 20],
-  ['Data Mining', 15],
-  ['Information Systems', 15],
-  ['Mobile App', 15],
-  ['Blockchain', 15],
-  ['Web Development', 15],
-  ['Network Security', 15],
-  ['HCI', 20],
-  ['Database', 15],
-  ['Augmented Reality', 15],
-  ['Game Dev', 15]
-];
+  var words = [
+    ['Artificial Intelligence', 15],
+    ['Machine Learning', 15],
+    ['Cyber Security', 15],
+    ['Big Data', 15],
+    ['Software Engineering', 15],
+    ['Cloud Computing', 15],
+    ['Data Science', 15],
+    ['IoT', 20],
+    ['Computer Vision', 15],
+    ['NLP', 20],
+    ['Data Mining', 15],
+    ['Information Systems', 15],
+    ['Mobile App', 15],
+    ['Blockchain', 15],
+    ['Web Development', 15],
+    ['Network Security', 15],
+    ['HCI', 20],
+    ['Database', 15],
+    ['Augmented Reality', 15],
+    ['Game Dev', 15]
+  ];
 
-WordCloud(document.getElementById('wordcloud'), {
-  list: words,
-  gridSize: 10,            // lebih rapat
-  weightFactor: 1.2,      // skala kata lebih kecil
-  minSize: 8,             // huruf terkecil tetap terbaca
-  fontFamily: 'Arial',
-  color: 'random-light',
-  backgroundColor: '#ffffff',
-  shape: 'circle',        // bentuk awan melingkar
-  shuffle: true,
-  rotateRatio: 0.5,
-  rotationSteps: 2
-}); // Menambahkan efek mouseover dan mouseout untuk zoom-in/zoom-out
-  hover: function (event, word, weight, radius) {
-    const canvas = document.getElementById('wordcloud');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
-    WordCloud(canvas, {
+  WordCloud(
+    document.getElementById('wordcloud'),
+    {
       list: words,
-      gridSize: 4,
-      weightFactor: 1.2,
-      minSize: 8,
+      gridSize: 5,           // lebih rapat
+      weightFactor: 1.0,     // kata-kata overall lebih kecil
+      minSize: 8,            // minimal font size
       fontFamily: 'Arial',
       color: 'random-light',
       backgroundColor: '#ffffff',
@@ -72,17 +52,18 @@ WordCloud(document.getElementById('wordcloud'), {
       shuffle: true,
       rotateRatio: 0.5,
       rotationSteps: 2,
-      // Mengatur ukuran kata yang sedang di-hover
-      fontSize: function (word, weight) {
-        return word === 'Database' ? 50 : weight * 2; // Contoh khusus untuk Database
-      }
-    });
-  },
 
-  click: function(event, word, weight, radius) {
-    alert('You clicked on ' + word + '!');
-  }
-});
+      // callback saat hover: kita cuma ganti cursor
+      hover: function(item, dimension, event) {
+        event.target.style.cursor = 'pointer';
+      },
+
+      // callback saat click: contoh alert
+      click: function(item) {
+        alert('You clicked: ' + item[0]);
+      }
+    }
+  );
 </script>
 
 </body>
