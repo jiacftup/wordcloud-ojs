@@ -2,10 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wordcloud.js for OJS 3</title>
-  <script src="wordcloud.js"></script> <!-- Ini memanggil file wordcloud.js -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keywords</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-  <h1>Wordcloud.js Loaded!</h1>
+
+<h2>Keywords</h2>
+
+<canvas id="wordcloud" width="300" height="300"></canvas>
+
+<!-- Load wordcloud2.js from CDN -->
+<script src="https://cdn.jsdelivr.net/gh/timdream/wordcloud2.js@gh-pages/src/wordcloud2.js"></script>
+<script>
+var words = [
+  ['Artificial Intelligence', 50],
+  ['Machine Learning', 45],
+  ['Cyber Security', 40],
+  ['Big Data', 35],
+  ['Software Engineering', 30],
+  ['Cloud Computing', 25],
+  ['Data Science', 20],
+  ['IoT', 30],
+  ['Computer Vision', 25],
+  ['NLP', 20],
+  ['Data Mining', 28],
+  ['Information Systems', 22],
+  ['Mobile App', 18],
+  ['Blockchain', 15],
+  ['Web Development', 18],
+  ['Network Security', 22],
+  ['HCI', 20],
+  ['Database', 25],
+  ['Augmented Reality', 15],
+  ['Game Dev', 15]
+];
+
+WordCloud(document.getElementById('wordcloud'), {
+  list: words,
+  gridSize: 8,
+  weightFactor: 2,
+  fontFamily: 'Arial',
+  color: 'random-light',
+  backgroundColor: '#ffffff',
+  rotateRatio: 0.5,
+  rotationSteps: 2,
+  shuffle: true
+});
+</script>
+
 </body>
 </html>
