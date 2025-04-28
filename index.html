@@ -60,6 +60,33 @@ WordCloud(document.getElementById('wordcloud'), {
   shuffle: true,
   rotateRatio: 0.5,
   rotationSteps: 2
+}); // Menambahkan efek mouseover dan mouseout untuk zoom-in/zoom-out
+  hover: function (event, word, weight, radius) {
+    const canvas = document.getElementById('wordcloud');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+    WordCloud(canvas, {
+      list: words,
+      gridSize: 4,
+      weightFactor: 1.2,
+      minSize: 8,
+      fontFamily: 'Arial',
+      color: 'random-light',
+      backgroundColor: '#ffffff',
+      shape: 'circle',
+      shuffle: true,
+      rotateRatio: 0.5,
+      rotationSteps: 2,
+      // Mengatur ukuran kata yang sedang di-hover
+      fontSize: function (word, weight) {
+        return word === 'Database' ? 50 : weight * 2; // Contoh khusus untuk Database
+      }
+    });
+  },
+
+  click: function(event, word, weight, radius) {
+    alert('You clicked on ' + word + '!');
+  }
 });
 </script>
 
