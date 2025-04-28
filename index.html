@@ -23,8 +23,10 @@
 <canvas id="wordcloud" width="200" height="200"></canvas>
 
 <!-- Load wordcloud2.js -->
-<script src="https://cdn.jsdelivr.net/gh/timdream/wordcloud2.js@gh-pages/src/wordcloud2.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud@1/build/d3.layout.cloud.js"></script>
 <script>
+  (function(){
 var words = [
   ['Artificial Intelligence', 15],
   ['Machine Learning', 15],
@@ -47,49 +49,61 @@ var words = [
   ['Augmented Reality', 15],
   ['Game Dev', 15]
 ];
+var width = document.getElementById('wordcloud').clientWidth;
+  var height = document.getElementById('wordcloud').clientHeight;
+  var fill = d3.scaleOrdinal()
+               .range(["#953255","#AA9139","#2F3F73","#257059"]);
 
-WordCloud(document.getElementById('wordcloud'), {
-  list: words,
-  gridSize: 4,            // lebih rapat
-  weightFactor: 1.2,      // skala kata lebih kecil
-  minSize: 8,             // huruf terkecil tetap terbaca
-  fontFamily: 'Arial',
-  color: 'random-light',
-  backgroundColor: '#ffffff',
-  shape: 'circle',        // bentuk awan melingkar
-  shuffle: true,
-  rotateRatio: 0.5,
-  rotationSteps: 2,
+  // buat layout d3-cloud
+  d3.layout.cloud()
+    .size([width, height])
+    .words(words.map(function(d){ return {text:d.text, size:d.size}; }))
+    .padding(5)
+    .rotate(function(){ return ~~(Math.random()*2)*90; })
+    .font("Impact")
+    .fontSize(function(d){ return d.size; })
+    .on("end", draw)
+    .start();
 
-  // Menambahkan efek mouseover dan mouseout untuk zoom-in/zoom-out
-  hover: function (event, word, weight, radius) {
-    const canvas = document.getElementById('wordcloud');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
-    WordCloud(canvas, {
-      list: words,
-      gridSize: 10,
-      weightFactor: 1.2,
-      minSize: 4,
-      fontFamily: 'Arial',
-      color: 'random-light',
-      backgroundColor: '#ffffff',
-      shape: 'circle',
-      shuffle: true,
-      rotateRatio: 0.5,
-      rotationSteps: 2,
-      // Mengatur ukuran kata yang sedang di-hover
-      fontSize: function (word, weight) {
-        return word === 'Database' ? 50 : weight * 2; // Contoh khusus untuk Database
-      }
-    });
-  },
-
-  click: function(event, word, weight, radius) {
-    alert('You clicked on ' + word + '!');
+  // fungsi draw
+  function draw(words) {
+    d3.select("#wordcloud").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate("+width/2+","+height/2+")")
+    .selectAll("text")
+      .data(words)
+    .enter().append("text")
+      .style("font-family", "Impact")
+      .style("fill", function(d,i){ return fill(i); })
+      .style("font-size", function(d){ return d.size + "px"; })
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d){
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      })
+      // klik → ke search URL
+      .on("click", function(d){
+        var slug = encodeURIComponent("*"+d.text+"*");
+        window.open(
+          "https://journal.univpancasila.ac.id/index.php/asiimetrik/search?query=" + slug,
+          "_blank"
+        );
+      })
+      // hover → zoom in
+      .on("mouseover", function(d){
+        d3.select(this)
+          .transition().duration(200)
+          .style("font-size", (d.size * 1.4) + "px");
+      })
+      // mouse keluar → zoom out ke size semula
+      .on("mouseout", function(d){
+        d3.select(this)
+          .transition().duration(200)
+          .style("font-size", d.size + "px");
+      });
   }
-});
+})();
 </script>
-
 </body>
 </html>
