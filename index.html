@@ -19,9 +19,10 @@
 
 <h2>Keywords</h2>
 
-<canvas id="wordcloud" width="300" height="300"></canvas>
+<!-- Canvas diperbesar -->
+<canvas id="wordcloud" width="400" height="400"></canvas>
 
-<!-- Load wordcloud2.js from CDN -->
+<!-- Load wordcloud2.js -->
 <script src="https://cdn.jsdelivr.net/gh/timdream/wordcloud2.js@gh-pages/src/wordcloud2.js"></script>
 <script>
 var words = [
@@ -49,14 +50,16 @@ var words = [
 
 WordCloud(document.getElementById('wordcloud'), {
   list: words,
-  gridSize: 6,
-  weightFactor: 1.5,
+  gridSize: 4,            // lebih rapat
+  weightFactor: 1.2,      // skala kata lebih kecil
+  minSize: 8,             // huruf terkecil tetap terbaca
   fontFamily: 'Arial',
   color: 'random-light',
   backgroundColor: '#ffffff',
+  shape: 'circle',        // bentuk awan melingkar
+  shuffle: true,
   rotateRatio: 0.5,
-  rotationSteps: 2,
-  shuffle: true
+  rotationSteps: 2
 });
 </script>
 
